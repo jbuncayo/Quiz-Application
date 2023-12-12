@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const quizContainer = document.getElementById("quiz-container");
+    const startQuizButton = document.getElementById("start-quiz-button");
     const quizForm = document.getElementById("quiz-form");
     const questionContainer = document.getElementById("question-container");
     const resultContainer = document.getElementById("result-container");
@@ -6,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.querySelector("button[type='submit']");
     const progressBar = document.getElementById("progress-bar");
     const reviewButton = document.getElementById("review-button");
+
+    submitButton.style.display = "none"; // Initially hide the submit button
 
     let currentQuestionIndex = 0;
     let logs = [];
@@ -30,6 +34,22 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateProgressBar() {
         const progress = (currentQuestionIndex + 1) / questions.length * 100;
         progressBar.style.width = `${progress}%`;
+    }
+    
+    // Function to shuffle an array (Fisher-Yates algorithm)
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function startQuiz() {
+        startQuizButton.style.display = "none";
+        quizForm.style.display = "block";
+        submitButton.style.display = "block";
+        startTimer();
+        displayCurrentQuestion();
     }
 
     function displayReview() {
@@ -156,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
         questionContainer.appendChild(questionDiv);
 
         if (currentQuestionIndex === questions.length - 1) {
-            submitButton.textContent = "Submit";
+            /*submitButton.textContent = "Submit";*/
         } else {
             submitButton.textContent = "Next";
         }
@@ -164,6 +184,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // Update the progress bar
         updateProgressBar();
     }
+
+    // Event listener for the "Start Quiz" button
+    startQuizButton.addEventListener("click", startQuiz);
 
     const questions = [
         {
@@ -192,7 +215,4 @@ document.addEventListener("DOMContentLoaded", function () {
             correctAnswer: "Django"
         }
     ];
-
-    displayCurrentQuestion();
-    startTimer();
 });
